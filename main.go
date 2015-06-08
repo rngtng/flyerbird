@@ -13,6 +13,8 @@ var port = os.Getenv("PORT")
 func main() {
 	m := martini.Classic()
 
+	m.Use(martini.Static("public"))
+
 	m.Get("/", func(response http.ResponseWriter) {
 		response.Write([]byte("Hello World"))
 	})
