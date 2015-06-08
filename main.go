@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	// "strings"
 )
 
 var port = os.Getenv("PORT")
@@ -14,7 +13,11 @@ var port = os.Getenv("PORT")
 func main() {
 	m := martini.Classic()
 
-	m.Get("/render", func(req *http.Request) []byte {
+	m.Get("/", func(response http.ResponseWriter) {
+		response.Write([]byte("Hello World"))
+	})
+
+	m.Get("/render", func(response http.ResponseWriter, req *http.Request) {
 		// params := req.URL.Query()
 		// urls := strings.Split(params.Get("url"), "\n")
 
@@ -26,7 +29,8 @@ func main() {
 			log.Fatal(err)
 		}
 
-		return out
+		response.Header().Set("Content-Type", "application/octet-stream")
+		response.Write(out)
 	})
 
 	if port == "" {
