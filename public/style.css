@@ -1,28 +1,30 @@
 .imageBox
 {
     position: relative;
-    height: 400px;
-    width: 400px;
-    border:1px solid #aaa;
-    background: #fff;
+    height: 350px;
+    width: 350px;
+    border: 2px dotted red;
+    background-color: #CCC;
     overflow: hidden;
     background-repeat: no-repeat;
-    cursor:move;
+    cursor: move;
+}
+
+.imageBox.dragover {
+    border: 2px solid red;
 }
 
 .imageBox .thumbBox
 {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    margin-top: -100px;
-    margin-left: -100px;
-    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-image: url(http://localhost:3000/mask2.svg);
+    /*box-sizing: border-box;
     border: 1px solid rgb(102, 102, 102);
-    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
-    background: none repeat scroll 0% 0% transparent;
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);*/
 }
 
 .imageBox .spinner
@@ -33,6 +35,6 @@
     bottom: 0;
     right: 0;
     text-align: center;
-    line-height: 400px;
-    background: rgba(0,0,0,0.7);
+    line-height: 350px;
+    /*background: rgba(0,0,0,0.7);*/
 }

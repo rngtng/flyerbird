@@ -24,7 +24,7 @@
 </head>
 <body>
 
-<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="/jquery-2.1.4.min.js"></script>
 <script src="/cropbox.js"></script>
 <div class="container">
     <div class="imageBox">
@@ -32,10 +32,12 @@
         <div class="spinner" style="display: none">Loading...</div>
     </div>
     <div class="action">
-        <input type="file" id="file" style="float:left; width: 250px">
-        <input type="button" id="btnCrop" value="Crop" style="float: right">
-        <input type="button" id="btnZoomIn" value="+" style="float: right">
-        <input type="button" id="btnZoomOut" value="-" style="float: right">
+        <form action="/render">
+            <input type="file" id="file" style="float:left; width: 250px">
+            <input type="button" id="btnCrop" value="Crop" style="float: right">
+            <input type="button" id="btnZoomIn" value="+" style="float: right">
+            <input type="button" id="btnZoomOut" value="-" style="float: right">
+        </form>
     </div>
     <div class="cropped">
 
@@ -46,23 +48,39 @@
         var options =
         {
             thumbBox: '.thumbBox',
-            spinner: '.spinner',
-            imgSrc: 'avatar.png'
+            spinner: '.spinner'
         }
         var cropper = $('.imageBox').cropbox(options);
+
         $('#file').on('change', function(){
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                options.imgSrc = e.target.result;
-                cropper = $('.imageBox').cropbox(options);
-            }
-            reader.readAsDataURL(this.files[0]);
+            cropper.load(this.files[0]);
             this.files = [];
         })
+
+        $('.imageBox').on('dragenter', function(e){
+          e.stopPropagation();
+          e.preventDefault();
+          $(this).addClass('dragover');
+
+        }).on('dragover', function(e){
+          e.stopPropagation();
+          e.preventDefault();
+
+        }).on('dragleave', function(e){
+          $(this).removeClass('dragover');
+
+        }).on('drop', function(e){
+          $(this).removeClass('dragover');
+          e.preventDefault();
+          var files = e.originalEvent.dataTransfer.files;
+          cropper.load(files[0]);
+        });
+
         $('#btnCrop').on('click', function(){
             var img = cropper.getDataURL();
             $('.cropped').append('<img src="'+img+'">');
         })
+
         $('#btnZoomIn').on('click', function(){
             cropper.zoomIn();
         })

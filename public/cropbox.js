@@ -62,6 +62,21 @@
                 {
                     this.ratio*=0.9;
                     setBackground();
+                },
+                load: function(file)
+                {
+                    var reader = new FileReader(),
+                    image = this.image;
+                    reader.onload = function(e) {
+                        image.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                    this.reset();
+                },
+                reset: function()
+                {
+                    this.ratio = 1;
+                    setBackground();
                 }
             },
             setBackground = function()
@@ -127,7 +142,9 @@
             $(window).bind('mouseup', imgMouseUp);
             el.bind('mousewheel DOMMouseScroll', zoomImage);
         };
-        obj.image.src = options.imgSrc;
+        if (options.imgSrc) {
+            obj.image.src = options.imgSrc;
+        }
         el.on('remove', function(){$(window).unbind('mouseup', imgMouseUp)});
 
         return obj;

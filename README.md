@@ -44,8 +44,8 @@ more see: http://mmcgrana.github.io/2012/09/getting-started-with-go-on-heroku.ht
 - [ ] get python working on Heroku
 - [ ] Design
 - [ ] test mobile / responsive
-- [ ]
-- [ ]
+- [ ] max/min ratio
+- [x] add mask
 
 
 ## Sources
