@@ -79,6 +79,7 @@
                     setBackground();
                 }
             },
+
             setBackground = function()
             {
                 var w =  parseInt(obj.image.width)*obj.ratio;
@@ -91,8 +92,10 @@
                     'background-image': 'url(' + obj.image.src + ')',
                     'background-size': w +'px ' + h + 'px',
                     'background-position': pw + 'px ' + ph + 'px',
-                    'background-repeat': 'no-repeat'});
+                    'background-repeat': 'no-repeat'
+                });
             },
+
             imgMouseDown = function(e)
             {
                 e.stopImmediatePropagation();
@@ -101,6 +104,7 @@
                 obj.state.mouseX = e.clientX;
                 obj.state.mouseY = e.clientY;
             },
+
             imgMouseMove = function(e)
             {
                 e.stopImmediatePropagation();
@@ -126,6 +130,32 @@
                 e.stopImmediatePropagation();
                 obj.state.dragable = false;
             },
+
+            dragenter = function(e)
+            {
+                e.stopPropagation();
+                e.preventDefault();
+                $(this).addClass('dragover');
+            },
+
+            dragover = function(e)
+            {
+                e.stopPropagation();
+                e.preventDefault();
+            },
+
+            dragleave = function(e)
+            {
+                $(this).removeClass('dragover');
+            },
+
+            drop = function(e)
+            {
+              $(this).removeClass('dragover');
+              e.preventDefault();
+              obj.load(e.originalEvent.dataTransfer.files[0]);
+            },
+
             zoomImage = function(e)
             {
                 e.originalEvent.wheelDelta > 0 || e.originalEvent.detail < 0 ? obj.ratio*=1.1 : obj.ratio*=0.9;
@@ -136,15 +166,20 @@
         obj.image.onload = function() {
             obj.spinner.hide();
             setBackground();
-
-            el.bind('mousedown', imgMouseDown);
-            el.bind('mousemove', imgMouseMove);
-            $(window).bind('mouseup', imgMouseUp);
-            el.bind('mousewheel DOMMouseScroll', zoomImage);
         };
         if (options.imgSrc) {
             obj.image.src = options.imgSrc;
         }
+
+        el.bind('mousedown', imgMouseDown);
+        el.bind('mousemove', imgMouseMove);
+        el.bind('dragenter', dragenter);
+        el.bind('dragover',  dragover);
+        el.bind('dragleave', dragleave);
+        el.bind('drop',      drop);
+
+        $(window).bind('mouseup', imgMouseUp);
+        el.bind('mousewheel DOMMouseScroll', zoomImage);
         el.on('remove', function(){$(window).unbind('mouseup', imgMouseUp)});
 
         return obj;
@@ -154,5 +189,3 @@
         return new cropbox(options, this);
     };
 }));
-
-

@@ -36,8 +36,9 @@ more see: http://mmcgrana.github.io/2012/09/getting-started-with-go-on-heroku.ht
 - [x] Simple webservice for static file & pdf generation
 - [x] fake pdf response
 - [x] add croppper
-- [ ] On crop call backendservice
-- [ ] Drag&Drop File
+- [x] add mask
+- [x] Drag&Drop File
+- [x] On crop call backendservice
 - [ ] Duplicate workflow for Backside
 - [ ] Pass query params to CLI
 - [ ] integrate actual CLI (python!!)
@@ -45,7 +46,6 @@ more see: http://mmcgrana.github.io/2012/09/getting-started-with-go-on-heroku.ht
 - [ ] Design
 - [ ] test mobile / responsive
 - [ ] max/min ratio
-- [x] add mask
 
 
 ## Sources

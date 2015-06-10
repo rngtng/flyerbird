@@ -1,94 +1,70 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Crop Box</title>
-    <link rel="stylesheet" href="/style.css" type="text/css" />
-    <style>
-        .container
-        {
-            position: absolute;
-            top: 10%; left: 10%; right: 0; bottom: 0;
-        }
-        .action
-        {
-            width: 400px;
-            height: 30px;
-            margin: 10px 0;
-        }
-        .cropped>img
-        {
-            margin-right: 10px;
-        }
-    </style>
-</head>
-<body>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>FlyerBird</title>
 
-<script src="/jquery-2.1.4.min.js"></script>
-<script src="/cropbox.js"></script>
-<div class="container">
-    <div class="imageBox">
-        <div class="thumbBox"></div>
-        <div class="spinner" style="display: none">Loading...</div>
-    </div>
-    <div class="action">
-        <form action="/render">
-            <input type="file" id="file" style="float:left; width: 250px">
-            <input type="button" id="btnCrop" value="Crop" style="float: right">
-            <input type="button" id="btnZoomIn" value="+" style="float: right">
-            <input type="button" id="btnZoomOut" value="-" style="float: right">
+        <link rel="stylesheet" href="/style.css" type="text/css" />
+        <script src="/jquery-2.1.4.min.js"></script>
+        <script src="/cropbox.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div id="imageBoxFront" class="imageBox">
+                <div class="thumbBox"></div>
+                <div class="spinner">Drop Image here...</div>
+            </div>
+
+            <div id="imageBoxBack" class="imageBox">
+                <div class="thumbBox"></div>
+                <div class="spinner">Drop Image here...</div>
+            </div>
+
+            <div class="action">
+                <input id="file"       type="file"   class="upload">
+                <input id="btnCrop"    type="button" class="button"  value="Get PDF">
+                <input id="btnZoomIn"  type="button" class="button"  value="+">
+                <input id="btnZoomOut" type="button" class="button"  value="-">
+            </div>
+        </div>
+
+        <form id="upload" action="/render" method="post">
+            <input id="dataFront" type="hidden" name="data_front">
+            <input id="dataBack"  type="hidden" name="data_back">
         </form>
-    </div>
-    <div class="cropped">
 
-    </div>
-</div>
-<script type="text/javascript">
-    $(window).load(function() {
-        var options =
-        {
-            thumbBox: '.thumbBox',
-            spinner: '.spinner'
-        }
-        var cropper = $('.imageBox').cropbox(options);
+        <script type="text/javascript">
+            $(window).load(function() {
+                var cropperFront = $('#imageBoxFront').cropbox({
+                    thumbBox: '.thumbBox',
+                    spinner: '.spinner'
+                });
 
-        $('#file').on('change', function(){
-            cropper.load(this.files[0]);
-            this.files = [];
-        })
+                var cropperBack = $('#imageBoxBack').cropbox({
+                    thumbBox: '.thumbBox',
+                    spinner: '.spinner'
+                });
 
-        $('.imageBox').on('dragenter', function(e){
-          e.stopPropagation();
-          e.preventDefault();
-          $(this).addClass('dragover');
+                $('#file').on('change', function(){
+                    cropperFront.load(this.files[0]);
+                    this.files = [];
+                })
 
-        }).on('dragover', function(e){
-          e.stopPropagation();
-          e.preventDefault();
+                $('#btnCrop').on('click', function(){
+                    $("#dataFront").val(cropperFront.getDataURL().replace('data:image/png;base64,',''));
+                    $("#dataBack").val(cropperBack.getDataURL().replace('data:image/png;base64,',''));
+                    $("#upload").submit();
+                })
 
-        }).on('dragleave', function(e){
-          $(this).removeClass('dragover');
+                $('#btnZoomIn').on('click', function(){
+                    cropperFront.zoomIn();
+                })
 
-        }).on('drop', function(e){
-          $(this).removeClass('dragover');
-          e.preventDefault();
-          var files = e.originalEvent.dataTransfer.files;
-          cropper.load(files[0]);
-        });
+                $('#btnZoomOut').on('click', function(){
+                    cropperFront.zoomOut();
+                })
+            });
+        </script>
 
-        $('#btnCrop').on('click', function(){
-            var img = cropper.getDataURL();
-            $('.cropped').append('<img src="'+img+'">');
-        })
-
-        $('#btnZoomIn').on('click', function(){
-            cropper.zoomIn();
-        })
-        $('#btnZoomOut').on('click', function(){
-            cropper.zoomOut();
-        })
-    });
-</script>
-
-</body>
+    </body>
 </html>
