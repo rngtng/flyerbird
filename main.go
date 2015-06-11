@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 
 	"github.com/go-martini/martini"
+	"os/exec"
 )
 
 var port = os.Getenv("PORT")
@@ -18,46 +18,33 @@ func main() {
 
 	m.Use(martini.Static("public"))
 
-	m.Get("/", func(response http.ResponseWriter) {
-		response.Write([]byte("Hello World"))
-	})
-
 	m.Post("/render", func(response http.ResponseWriter, req *http.Request) {
 		dataFront := req.FormValue("data_front")
 		data, err := base64.StdEncoding.DecodeString(dataFront)
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = ioutil.WriteFile("front.png", data, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-		// file, _ := ioutil.TempFile(os.TempDir(), "front")
-		// defer os.Remove(file.Name())
-		// file.Write(data)
+		fileFront, _ := ioutil.TempFile(os.TempDir(), "front")
+		defer os.Remove(fileFront.Name())
+		fileFront.Write(data)
 
 		dataBack := req.FormValue("data_back")
 		data, err = base64.StdEncoding.DecodeString(dataBack)
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = ioutil.WriteFile("back.png", data, 0644)
-		if err != nil {
-			log.Fatal(err)
-		}
-		// file, _ := ioutil.TempFile(os.TempDir(), "back")
-		// defer os.Remove(file.Name())
-		// file.Write(data)
+		fileBack, _ := ioutil.TempFile(os.TempDir(), "back")
+		defer os.Remove(fileBack.Name())
+		fileBack.Write(data)
 
-		command := "cat"
-		cliParams := "data/test.pdf"
-
-		out, err := exec.Command(command, cliParams).CombinedOutput()
+		out, err := exec.Command("cut/main.py", fileFront.Name(), fileBack.Name()).CombinedOutput()
 		if err != nil {
+			log.Println(string(out))
 			log.Fatal(err)
 		}
 
 		response.Header().Set("Content-Type", "application/octet-stream")
+		response.Header().Set("Content-Disposition", "attachment; filename=\"origami.pdf\"")
 		response.Write(out)
 	})
 

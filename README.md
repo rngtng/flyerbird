@@ -39,13 +39,15 @@ more see: http://mmcgrana.github.io/2012/09/getting-started-with-go-on-heroku.ht
 - [x] add mask
 - [x] Drag&Drop File
 - [x] On crop call backendservice
-- [ ] Duplicate workflow for Backside
-- [ ] Pass query params to CLI
-- [ ] integrate actual CLI (python!!)
-- [ ] get python working on Heroku
-- [ ] Design
-- [ ] test mobile / responsive
+- [x] Duplicate workflow for Backside
+- [x] Save images to file and Pass to CLI
+- [x] get python working on Heroku
 - [ ] max/min ratio
+- [ ] multiple upload image support
+- [ ] if only one image
+- [ ] test mobile / responsive
+- [ ] Design
+- [ ] integrate actual CLI (python!!)
 
 
 ## Sources

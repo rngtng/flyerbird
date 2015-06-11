@@ -52,9 +52,9 @@
 }
 
 #imageBoxFront .thumbBox {
-    background-image: url(http://localhost:3000/mask_front.svg);
+    background-image: url("/mask_front.svg");
 }
 
 #imageBoxBack .thumbBox {
-    background-image: url(http://localhost:3000/mask_back.svg);
+    background-image: url("/mask_back.svg");
 }
